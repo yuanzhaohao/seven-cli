@@ -25,11 +25,8 @@ program.on('--help', function () {
   console.log();
   console.log('  Examples:')
   console.log()
-  console.log(chalk.gray('    # create a new project with an official template'))
-  console.log('    $ vue init webpack my-project')
-  console.log()
-  console.log(chalk.gray('    # create a new project straight from a github template'))
-  console.log('    $ vue init username/repo my-project')
+  console.log(chalk.gray('    # create a new project with template'))
+  console.log('    $ seven init vue ${project-name}')
   console.log()
 });
 

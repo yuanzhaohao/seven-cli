@@ -3,8 +3,13 @@
   "version": "0.0.1",
   "description": "前端构建工具",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "seven": "bin/seven",
+    "seven-init": "bin/seven-init",
+    "seven-list": "bin/seven-list"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   },
   "repository": {
     "type": "git",

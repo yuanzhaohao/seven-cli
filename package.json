@@ -5,8 +5,7 @@
   "main": "index.js",
   "bin": {
     "seven": "bin/seven",
-    "seven-init": "bin/seven-init",
-    "seven-list": "bin/seven-list"
+    "seven-init": "bin/seven-init"
   },
   "engines": {
     "node": ">=4.0.0"

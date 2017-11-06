@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+require('commander')
+  .version(require('../package.json').version)
+  .usage('<command> [options]')
+  .command('init', '初始化项目')
+  .parse(process.argv);

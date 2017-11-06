@@ -1,0 +1,114 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var download = require('download-git-repo');
+var exists = require('fs').existsSync;
+var path = require('path');
+var ora = require('ora');
+var rm = require('rimraf').sync;
+var home = require('user-home');
+var chalk = require('chalk');
+var inquirer = require('inquirer');
+var generate = require('../lib/generate');
+var checkVersion = require('../lib/check-version');
+
+program
+  .usage('<template-name> [project-name]')
+  .option('-c, --clone', 'use git clone')
+  .option('--offline', 'use cached template')
+
+
+/**
+ * help
+ */
+program.on('--help', function () {
+  console.log();
+  console.log('  Examples:')
+  console.log()
+  console.log(chalk.gray('    # create a new project with an official template'))
+  console.log('    $ vue init webpack my-project')
+  console.log()
+  console.log(chalk.gray('    # create a new project straight from a github template'))
+  console.log('    $ vue init username/repo my-project')
+  console.log()
+});
+
+function help() {
+  program.parse(process.argv);
+  if (program.args.length < 1) {
+    return program.help();
+  }
+}
+help();
+
+/**
+ * Settings
+ */
+var template = program.args[0];
+var rawName = program.args[1];
+var inPlace = !rawName || rawName === '.';
+var name = inPlace
+  ? path.relative('../', process.cwd())
+  : rawName;
+var to = path.resolve(rawName || '.');
+var clone = program.clone || false;
+console.log(template);
+
+var tmp = path.join(home, '.iot-template', template.replace(/\//g, '-'));
+
+/**
+ * Padding
+ */
+console.log();
+process.on('exit', function() {
+  console.log();
+});
+
+if (exists(to)) {
+  inquirer.prompt([{
+    type: 'confirm',
+    message: inPlace
+      ? 'Generate project in current directory?'
+      : 'Target directory exists. Continue?',
+    name: 'ok'
+  }]).then(function (answers) {
+    console.log(answers);
+    if (answers.ok) {
+      run();
+    }
+  });
+} else {
+  run();
+}
+
+
+function run() {
+  checkVersion(function() {
+    var officialTemplate = 'vuejs-templates/' + template;
+    downloadAndGenerate(officialTemplate);
+  });
+}
+
+function downloadAndGenerate(template) {
+  var spinner = ora('downloading template');
+  spinner.start();
+  if (exists(tmp)) {
+    rm(tmp);
+  }
+  console.log(template);
+  download(template, tmp, {
+    clone: clone
+  }, function(err) {
+    spinner.stop();
+    if (err) {
+      console.log(chalk.red('Failed to download repo ' + template + ': ' + err.message.trim()));
+    }
+    // generate(name, tmp, to, function(err) {
+    //   if (err) {
+    //     console.log(chalk.red(err));
+    //   }
+    //   console.log();
+    //   console.log(chalk.green('Generated "%s".', name));
+    // });
+  });
+}

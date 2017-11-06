@@ -9,7 +9,7 @@ var rm = require('rimraf').sync;
 var home = require('user-home');
 var chalk = require('chalk');
 var inquirer = require('inquirer');
-var generate = require('../lib/generate');
+// var generate = require('../lib/generate');
 var checkVersion = require('../lib/check-version');
 
 program

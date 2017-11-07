@@ -9,13 +9,13 @@ var rm = require('rimraf').sync;
 var home = require('user-home');
 var chalk = require('chalk');
 var inquirer = require('inquirer');
-// var generate = require('../lib/generate');
 var checkVersion = require('../lib/check-version');
 
 program
   .usage('<template-name> [project-name]')
   .option('-c, --clone', 'use git clone')
   .option('--offline', 'use cached template')
+  .parse(process.argv);
 
 
 /**
@@ -25,33 +25,21 @@ program.on('--help', function () {
   console.log();
   console.log('  Examples:')
   console.log()
-  console.log(chalk.gray('    # create a new project with template'))
-  console.log('    $ seven init vue ${project-name}')
+  console.log(chalk.gray('    # create a new project'))
+  console.log('    $ seven init ${project-name}')
   console.log()
 });
-
-function help() {
-  program.parse(process.argv);
-  if (program.args.length < 1) {
-    return program.help();
-  }
-}
-help();
 
 /**
  * Settings
  */
-var template = program.args[0];
-var rawName = program.args[1];
+var rawName = program.args[0];
 var inPlace = !rawName || rawName === '.';
 var name = inPlace
   ? path.relative('../', process.cwd())
   : rawName;
 var to = path.resolve(rawName || '.');
 var clone = program.clone || false;
-console.log(template);
-
-var tmp = path.join(home, '.iot-template', template.replace(/\//g, '-'));
 
 /**
  * Padding
@@ -65,34 +53,72 @@ if (exists(to)) {
   inquirer.prompt([{
     type: 'confirm',
     message: inPlace
-      ? 'Generate project in current directory?'
-      : 'Target directory exists. Continue?',
+      ? '在现有目录下构建?'
+      : '目录已存在 是否继续?',
     name: 'ok'
   }]).then(function (answers) {
-    console.log(answers);
     if (answers.ok) {
-      run();
+      selectType();
     }
   });
 } else {
-  run();
+  selectType();
 }
 
 
-function run() {
-  checkVersion(function() {
-    var officialTemplate = 'vuejs-templates/' + template;
-    downloadAndGenerate(officialTemplate);
+function selectType() {
+  var prompts = [];
+  var defaultOpts = {
+    desc: 'A new project',
+    branch: '0.0.1'
+  }
+  prompts.push({
+    type: 'list',
+    name: 'template',
+    message: '请选择项目模板',
+    choices: [{
+      name: 'vue项目',
+      value: 'vue'
+    }, {
+      name: 'weex项目',
+      value: 'weex'
+    }]
+  });
+  prompts.push({
+    type: 'input',
+    name: 'desc',
+    message: `请输入项目描述[${defaultOpts.desc}]: `
+  });
+  prompts.push({
+    type: 'input',
+    name: 'branch',
+    message: `请输入项目分支[${defaultOpts.branch}]: `
+  });
+  inquirer.prompt(prompts).then(function(answers) {
+    var projectOpts = Object.assign(answers, defaultOpts);
+    run(projectOpts);
   });
 }
 
-function downloadAndGenerate(template) {
-  var spinner = ora('downloading template');
+function run(opts) {
+  var template = opts.template === 'vue'
+    ? 'yuanzhaohao/scaffold-vue-webpack'
+    : 'yuanzhaohao/scaffold-weex-webpack';
+  var tmp = path.join(home, '.iot-template', opts.template.replace(/\//g, '-'));
+  downloadAndGenerate(template, tmp);
+  // checkVersion(function() {
+  //   var officialTemplate = 'vuejs-templates/' + template;
+  //   downloadAndGenerate(officialTemplate);
+  // });
+}
+
+function downloadAndGenerate(template, tmp) {
+  var spinner = ora('downloading template...');
+
   spinner.start();
   if (exists(tmp)) {
     rm(tmp);
   }
-  console.log(template);
   download(template, tmp, {
     clone: clone
   }, function(err) {

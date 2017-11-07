@@ -1,15 +1,20 @@
 #!/usr/bin/env node
 
-var program = require('commander');
-var download = require('download-git-repo');
-var exists = require('fs').existsSync;
-var path = require('path');
-var ora = require('ora');
-var rm = require('rimraf').sync;
-var home = require('user-home');
-var chalk = require('chalk');
-var inquirer = require('inquirer');
-var checkVersion = require('../lib/check-version');
+const program = require('commander');
+const download = require('download-git-repo');
+const exists = require('fs').existsSync;
+const path = require('path');
+const ora = require('ora');
+const rm = require('rimraf').sync;
+const tildify = require('tildify')
+const home = require('user-home');
+const chalk = require('chalk');
+const inquirer = require('inquirer');
+const logger = require('../lib/logger');
+const prompts = require('../lib/prompts');
+const generate = require('../lib/generate');
+const checkVersion = require('../lib/checkVersion');
+// const localPath = require('../lib/localPath');
 
 program
   .usage('<template-name> [project-name]')
@@ -31,17 +36,6 @@ program.on('--help', function () {
 });
 
 /**
- * Settings
- */
-var rawName = program.args[0];
-var inPlace = !rawName || rawName === '.';
-var name = inPlace
-  ? path.relative('../', process.cwd())
-  : rawName;
-var to = path.resolve(rawName || '.');
-var clone = program.clone || false;
-
-/**
  * Padding
  */
 console.log();
@@ -49,76 +43,77 @@ process.on('exit', function() {
   console.log();
 });
 
-if (exists(to)) {
-  inquirer.prompt([{
+/**
+ * Settings
+ */
+const rawName = program.args[0];
+const inPlace = !rawName || rawName === '.';
+const name = inPlace
+  ? path.relative('../', process.cwd())
+  : rawName;
+const to = path.resolve(rawName || '.');
+const clone = program.clone || false;
+const isExists = exists(to);
+let template;
+let tmp;
+
+if (isExists) {
+  prompts.unshift({
     type: 'confirm',
     message: inPlace
-      ? '在现有目录下构建?'
+      ? '在现有目录下新建子目录?'
       : '目录已存在 是否继续?',
     name: 'ok'
-  }]).then(function (answers) {
-    if (answers.ok) {
-      selectType();
-    }
   });
-} else {
-  selectType();
 }
 
-
-function selectType() {
-  var prompts = [];
-  var defaultOpts = {
-    desc: 'A new project',
-    branch: '0.0.1'
+inquirer.prompt(prompts).then(function(answers) {
+template = answers.template;
+  template = `yuanzhaohao/template-${template}`
+  tmp = path.join(home, '.seven-templates', template.replace(/\//g, '-'))
+  if (program.offline) {
+    console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
+    template = tmp;
   }
-  prompts.push({
-    type: 'list',
-    name: 'template',
-    message: '请选择项目模板',
-    choices: [{
-      name: 'vue项目',
-      value: 'vue'
-    }, {
-      name: 'weex项目',
-      value: 'weex'
-    }]
-  });
-  prompts.push({
-    type: 'input',
-    name: 'desc',
-    message: `请输入项目描述[${defaultOpts.desc}]: `
-  });
-  prompts.push({
-    type: 'input',
-    name: 'branch',
-    message: `请输入项目分支[${defaultOpts.branch}]: `
-  });
-  inquirer.prompt(prompts).then(function(answers) {
-    var projectOpts = Object.assign(answers, defaultOpts);
-    run(projectOpts);
-  });
-}
+  if (isExists) {
+    if (answers.ok) {
+      downloadAndGenerate(template);
+    }
+  } else {
+    downloadAndGenerate(template);
+  }
+});
 
-function run(opts) {
-  var template = opts.template === 'vue'
-    ? 'yuanzhaohao/scaffold-vue-webpack'
-    : 'yuanzhaohao/scaffold-weex-webpack';
-  var tmp = path.join(home, '.iot-template', opts.template.replace(/\//g, '-'));
-  downloadAndGenerate(template, tmp);
+function run() {
+  // if (localPath.isLocalPath(template)) {
+  //   const templatePath = localPath.getTemplatePath(template);
+  //   if (exists(templatePath)) {
+  //     generate(name, templatePath, to, function(err) {
+  //       if (err) logger.fatal(err);
+  //       console.log();
+  //       logger.success('构建成功 "%s"', name);
+  //     })
+  //   } else {
+  //     logger.fatal('Local template "%s" not found.', template);
+  //   }
+  // }
+  // let template = `yuanzhaohao/template-${template}`
+  // if (program.offline) {
+  //   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
+  //   template = tmp;
+  // }
   // checkVersion(function() {
   //   var officialTemplate = 'vuejs-templates/' + template;
   //   downloadAndGenerate(officialTemplate);
   // });
 }
 
-function downloadAndGenerate(template, tmp) {
-  var spinner = ora('downloading template...');
+function downloadAndGenerate(template) {
+  let spinner = ora('downloading template...');
 
   spinner.start();
-  if (exists(tmp)) {
-    rm(tmp);
-  }
+  if (exists(tmp)) rm(tmp);
+
   download(template, tmp, {
     clone: clone
   }, function(err) {
@@ -126,12 +121,10 @@ function downloadAndGenerate(template, tmp) {
     if (err) {
       console.log(chalk.red('Failed to download repo ' + template + ': ' + err.message.trim()));
     }
-    // generate(name, tmp, to, function(err) {
-    //   if (err) {
-    //     console.log(chalk.red(err));
-    //   }
-    //   console.log();
-    //   console.log(chalk.green('Generated "%s".', name));
-    // });
+    generate(name, tmp, to, function(err) {
+      if (err) logger.fatal(err);
+      console.log()
+      logger.success('Generated "%s".', name);
+    });
   });
 }

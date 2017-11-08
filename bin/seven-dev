@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const express = require('express');
+const webpack = require('webpack');
+
+const config = require('./config');
+const webpackConfig = require('./webpack.dev.config');
+
+const port = process.env.PORT || config.dev.port;
+
+const server = express();
+const compiler = webpack(webpackConfig);
+
+server.use('/static', express.static(path.resolve(__dirname, '../static')));
+server.use(require('connect-history-api-fallback')());
+server.use(require('webpack-dev-middleware')(compiler, {
+  publicPath: webpackConfig.output.publicPath,
+  quiet: true
+}));
+server.use(require('webpack-hot-middleware')(compiler, {
+  log: false,
+  heartbeat: 2000
+}));
+
+server.listen(port, function(err) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  var uri = 'http://localhost:' + port;
+  console.log('Listening at ' + uri + '\n');
+});

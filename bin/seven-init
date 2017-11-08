@@ -14,7 +14,7 @@ const logger = require('../lib/logger');
 const prompts = require('../lib/prompts');
 const generate = require('../lib/generate');
 const checkVersion = require('../lib/checkVersion');
-// const localPath = require('../lib/localPath');
+const localPath = require('../lib/localPath');
 
 program
   .usage('<template-name> [project-name]')
@@ -56,6 +56,7 @@ const clone = program.clone || false;
 const isExists = exists(to);
 let template;
 let tmp;
+let opts;
 
 if (isExists) {
   prompts.unshift({
@@ -68,8 +69,8 @@ if (isExists) {
 }
 
 inquirer.prompt(prompts).then(function(answers) {
-  const opts = Object.assign(answers, { name });
-  template = `yuanzhaohao/template-${answers.template}`
+  opts = Object.assign(answers, { name });
+  template = answers.template;
   tmp = path.join(home, '.seven-templates', template.replace(/\//g, '-'))
   if (program.offline) {
     console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
@@ -78,16 +79,35 @@ inquirer.prompt(prompts).then(function(answers) {
 
   if (isExists) {
     if (answers.ok) {
-      downloadAndGenerate(template, opts);
+      run();
     }
   } else {
-    downloadAndGenerate(template, opts);
+    run();
   }
 });
 
-function downloadAndGenerate(template, opts) {
+function run() {
+  console.log(localPath.isLocalPath(template));
+  if (localPath.isLocalPath(template)) {
+    const templatePath = localPath.getTemplatePath(template);
+    if (exists(templatePath)) {
+      generate(opts, templatePath, to, function(err) {
+        if (err) logger.fatal(err);
+        console.log();
+        logger.success('Generated "%s".', name);
+      });
+    } else {
+      logger.fatal('Local template "%s" not found.', template);
+    }
+  } else {
+    checkVersion(downloadAndGenerate);
+  }
+}
+
+function downloadAndGenerate() {
   let spinner = ora('downloading template...');
 
+  template = `yuanzhaohao/template-${template}`;
   spinner.start();
   if (exists(tmp)) rm(tmp);
 

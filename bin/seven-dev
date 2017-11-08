@@ -9,6 +9,7 @@ const webpackConfig = require('../lib/webpack.dev.config');
 
 program
   .option('--port [port]', 'Server port')
+  .option('--host [host]', 'Server host')
   .parse(process.argv);
 
 /**
@@ -20,6 +21,7 @@ process.on('exit', function() {
 });
 
 const port = program.port || 8777;
+const host = program.host || 'localhost';
 const server = express();
 const compiler = webpack(webpackConfig);
 
@@ -30,12 +32,12 @@ server.use(require('webpack-dev-middleware')(compiler, {
   quiet: true
 }));
 server.use(require('webpack-hot-middleware')(compiler, {
-  log: false,
-  heartbeat: 2000
+  heartbeat: 2000,
+  log: false
 }));
 
 server.listen(port, function(err) {
   if (err) logger.fatal(err);
-  var uri = 'http://localhost:' + port;
-  console.log('Listening at ' + uri + '\n');
+  const uri = `http://${host}:${port}`;
+  console.log(`Listening at ${uri}\n`);
 });

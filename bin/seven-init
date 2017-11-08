@@ -87,7 +87,6 @@ inquirer.prompt(prompts).then(function(answers) {
 });
 
 function run() {
-  console.log(localPath.isLocalPath(template));
   if (localPath.isLocalPath(template)) {
     const templatePath = localPath.getTemplatePath(template);
     if (exists(templatePath)) {

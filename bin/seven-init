@@ -17,7 +17,7 @@ const checkVersion = require('../lib/check-version');
 const localPath = require('../lib/local-path');
 
 program
-  .usage('<template-name> [project-name]')
+  .usage('[project-name]')
   .option('-c, --clone', 'use git clone')
   .option('--offline', 'use cached template')
   .parse(process.argv);

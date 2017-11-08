@@ -3,16 +3,27 @@
 const path = require('path');
 const express = require('express');
 const webpack = require('webpack');
+const program = require('commander')
+const webpackConfig = require('../lib/webpack.dev.config');
 
-const config = require('./config');
-const webpackConfig = require('./webpack.dev.config');
+program
+  .option('-p, --port', 'Server port')
+  .parse(process.argv);
 
-const port = process.env.PORT || config.dev.port;
+/**
+ * Padding
+ */
+console.log();
+process.on('exit', function() {
+  console.log();
+});
 
+const port = program.args[0] || 8777;
 const server = express();
+console.log(webpackConfig);
 const compiler = webpack(webpackConfig);
 
-server.use('/static', express.static(path.resolve(__dirname, '../static')));
+server.use('/static', express.static(path.join(process.cwd(), './static')));
 server.use(require('connect-history-api-fallback')());
 server.use(require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,

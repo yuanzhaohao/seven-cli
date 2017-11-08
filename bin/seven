@@ -3,5 +3,6 @@
 require('commander')
   .version(require('../package.json').version)
   .usage('<command> [options]')
-  .command('init', '初始化项目')
+  .command('init', 'init a new project')
+  .command('dev', 'develop your project')
   .parse(process.argv);

@@ -1,9 +1,9 @@
 {
-  "name": "",
-  "description": "",
-  "version": "",
-  "author": "",
-  "license": "",
+  "name": "test",
+  "description": "A new project",
+  "version": "0.0.1",
+  "author": "yuanzhaohao",
+  "license": "MIT",
   "private": true,
   "devDependencies": {
   }

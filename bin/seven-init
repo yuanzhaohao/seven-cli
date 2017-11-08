@@ -68,47 +68,24 @@ if (isExists) {
 }
 
 inquirer.prompt(prompts).then(function(answers) {
-template = answers.template;
-  template = `yuanzhaohao/template-${template}`
+  const opts = Object.assign(answers, { name });
+  template = `yuanzhaohao/template-${answers.template}`
   tmp = path.join(home, '.seven-templates', template.replace(/\//g, '-'))
   if (program.offline) {
     console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
     template = tmp;
   }
+
   if (isExists) {
     if (answers.ok) {
-      downloadAndGenerate(template);
+      downloadAndGenerate(template, opts);
     }
   } else {
-    downloadAndGenerate(template);
+    downloadAndGenerate(template, opts);
   }
 });
 
-function run() {
-  // if (localPath.isLocalPath(template)) {
-  //   const templatePath = localPath.getTemplatePath(template);
-  //   if (exists(templatePath)) {
-  //     generate(name, templatePath, to, function(err) {
-  //       if (err) logger.fatal(err);
-  //       console.log();
-  //       logger.success('构建成功 "%s"', name);
-  //     })
-  //   } else {
-  //     logger.fatal('Local template "%s" not found.', template);
-  //   }
-  // }
-  // let template = `yuanzhaohao/template-${template}`
-  // if (program.offline) {
-  //   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
-  //   template = tmp;
-  // }
-  // checkVersion(function() {
-  //   var officialTemplate = 'vuejs-templates/' + template;
-  //   downloadAndGenerate(officialTemplate);
-  // });
-}
-
-function downloadAndGenerate(template) {
+function downloadAndGenerate(template, opts) {
   let spinner = ora('downloading template...');
 
   spinner.start();
@@ -121,7 +98,7 @@ function downloadAndGenerate(template) {
     if (err) {
       console.log(chalk.red('Failed to download repo ' + template + ': ' + err.message.trim()));
     }
-    generate(name, tmp, to, function(err) {
+    generate(opts, tmp, to, function(err) {
       if (err) logger.fatal(err);
       console.log()
       logger.success('Generated "%s".', name);

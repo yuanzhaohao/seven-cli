@@ -1,7 +1,7 @@
 {
   "name": "seven-cli",
-  "version": "0.0.1",
-  "description": "前端构建工具",
+  "version": "0.0.2",
+  "description": "A front-end build tool 前端构建工具",
   "main": "index.js",
   "bin": {
     "seven": "bin/seven",

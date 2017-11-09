@@ -27,6 +27,7 @@ const compiler = webpack(webpackConfig);
 
 server.use('/static', express.static(path.join(process.cwd(), './static')));
 server.use(require('connect-history-api-fallback')());
+
 server.use(require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true

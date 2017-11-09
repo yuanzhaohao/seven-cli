@@ -5,4 +5,5 @@ require('commander')
   .usage('<command> [options]')
   .command('init', 'init a new project')
   .command('dev', 'develop your project')
+  .command('build', 'build your project')
   .parse(process.argv);

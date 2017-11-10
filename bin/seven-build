@@ -9,7 +9,7 @@ const program = require('commander');
 const webpack = require('webpack');
 const webpackConfig = require('../lib/webpack.prod.config');
 const logger = require('../lib/logger');
-const config = require(path.resolve('./abc.json'));
+const config = require(cwd('./abc.json'));
 
 program.parse(process.argv);
 

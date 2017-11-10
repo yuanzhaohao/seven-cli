@@ -11,7 +11,9 @@ const webpackConfig = require('../lib/webpack.prod.config');
 const logger = require('../lib/logger');
 const config = require(cwd('./abc.json'));
 
-program.parse(process.argv);
+program
+  .option('-p,--path [port]', 'Dist path')
+  .parse(process.argv);
 
 /**
  * Padding
@@ -21,14 +23,16 @@ process.on('exit', function() {
   console.log();
 });
 
-
+const assetsRoot = cwd(program.path || config.assetsRoot);
 const spinner = ora('building for production...');
+
+webpackConfig.output.path = assetsRoot;
 spinner.start();
 
-rm(path.join(config.assetsRoot), err => {
+rm(assetsRoot, err => {
   if (err) logger.fatal(err);
 
-  fs.copySync(cwd(config.staticPath), path.join(cwd(config.assetsRoot), config.staticPath));
+  fs.copySync(cwd(config.staticPath), path.join(assetsRoot, config.staticPath));
   webpack(webpackConfig, function (err, stats) {
     spinner.stop();
     if (err) logger.fatal(err);

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
+const fs = require('fs-extra');
+const path = require('path');
 const ora = require('ora');
 const rm = require('rimraf');
-const path = require('path');
 const chalk = require('chalk');
 const program = require('commander');
 const webpack = require('webpack');
@@ -20,12 +21,14 @@ process.on('exit', function() {
   console.log();
 });
 
+
 const spinner = ora('building for production...');
 spinner.start();
 
 rm(path.join(config.assetsRoot), err => {
   if (err) logger.fatal(err);
 
+  fs.copySync(cwd(config.staticPath), path.join(cwd(config.assetsRoot), config.staticPath));
   webpack(webpackConfig, function (err, stats) {
     spinner.stop();
     if (err) logger.fatal(err);
@@ -41,3 +44,7 @@ rm(path.join(config.assetsRoot), err => {
     if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n');
   })
 });
+
+function cwd(file) {
+  return path.resolve(file || '')
+}

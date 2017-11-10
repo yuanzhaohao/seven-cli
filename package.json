@@ -38,7 +38,6 @@
     "compression-webpack-plugin": "^1.0.1",
     "connect-history-api-fallback": "^1.4.0",
     "consolidate": "^0.15.0",
-    "copy-webpack-plugin": "^4.2.0",
     "css-loader": "^0.28.7",
     "download-git-repo": "^1.0.1",
     "express": "^4.16.2",

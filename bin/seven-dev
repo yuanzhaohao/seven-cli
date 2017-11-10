@@ -8,8 +8,8 @@ const logger = require('../lib/logger');
 const webpackConfig = require('../lib/webpack.dev.config');
 
 program
-  .option('--port [port]', 'Server port')
-  .option('--host [host]', 'Server host')
+  .option('-p,--port [port]', 'Server port')
+  .option('-H,--host [host]', 'Server host')
   .parse(process.argv);
 
 /**

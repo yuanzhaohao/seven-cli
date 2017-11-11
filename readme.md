@@ -22,5 +22,10 @@ Step 2. start developing
 $ seven dev
 ```
 
+Step 3. production
+```shell
+$ seven build
+```
+
 ## License
 MIT

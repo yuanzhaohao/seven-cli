@@ -62,8 +62,8 @@ if (isExists) {
   prompts.unshift({
     type: 'confirm',
     message: inPlace
-      ? '在现有目录下新建子目录?'
-      : '目录已存在 是否继续?',
+      ? 'Generate project in current directory?'
+      : 'Target directory exists. Continue?',
     name: 'ok'
   });
 }
@@ -94,6 +94,7 @@ function run() {
         if (err) logger.fatal(err);
         console.log();
         logger.success('Generated "%s".', name);
+        complete();
       });
     } else {
       logger.fatal('Local template "%s" not found.', template);
@@ -121,6 +122,14 @@ function downloadAndGenerate() {
       if (err) logger.fatal(err);
       console.log()
       logger.success('Generated "%s".', name);
+      complete();
     });
   });
+}
+
+function complete() {
+  const message = `To get started:\n\n  ${!inPlace ? `cd ${name}` : ''}\n  npm install\n  npm run dev\n\n`
+  console.log('\n' + message.split(/\r?\n/g).map(function (line) {
+    return '   ' + line
+  }).join('\n'));
 }

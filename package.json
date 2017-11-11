@@ -58,7 +58,6 @@
     "tildify": "^1.2.0",
     "url-loader": "^0.6.2",
     "user-home": "^2.0.0",
-    "vue": "^2.5.3",
     "vue-loader": "^13.5.0",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.3",

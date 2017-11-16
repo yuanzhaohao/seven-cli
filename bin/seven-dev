@@ -1,24 +1,24 @@
 #!/usr/bin/env node
+/**
+ * check config
+ */
+const checkConfig = require('../lib/check-config');
+checkConfig();
 
+/**
+ * program start
+ */
 const path = require('path');
+const program = require('commander');
 const express = require('express');
 const webpack = require('webpack');
-const program = require('commander');
-const logger = require('../lib/logger');
 const webpackConfig = require('../lib/webpack.dev.config');
+const logger = require('../lib/logger');
 
 program
   .option('-p,--port [port]', 'Server port')
   .option('-H,--host [host]', 'Server host')
   .parse(process.argv);
-
-/**
- * Padding
- */
-console.log();
-process.on('exit', function() {
-  console.log();
-});
 
 const port = program.port || 7777;
 const host = program.host || 'localhost';

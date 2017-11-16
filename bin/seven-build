@@ -7,6 +7,17 @@ const rm = require('rimraf');
 const chalk = require('chalk');
 const program = require('commander');
 const webpack = require('webpack');
+
+/**
+ * check config
+ */
+const checkConfig = require('../lib/check-config');
+checkConfig();
+
+
+/**
+ * start
+ */
 const webpackConfig = require('../lib/webpack.prod.config');
 const logger = require('../lib/logger');
 const config = require(cwd('./abc.json'));
@@ -15,13 +26,6 @@ program
   .option('-p,--path [port]', 'Dist path')
   .parse(process.argv);
 
-/**
- * Padding
- */
-console.log();
-process.on('exit', function() {
-  console.log();
-});
 
 const assetsRoot = cwd(program.path || config.assetsRoot);
 const spinner = ora('building for production...');

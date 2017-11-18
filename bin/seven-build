@@ -1,23 +1,20 @@
 #!/usr/bin/env node
 
-const fs = require('fs-extra');
-const path = require('path');
-const ora = require('ora');
-const rm = require('rimraf');
-const chalk = require('chalk');
-const program = require('commander');
-const webpack = require('webpack');
-
 /**
  * check config
  */
 const checkConfig = require('../lib/check-config');
 checkConfig();
 
-
 /**
  * start
  */
+const fs = require('fs-extra');
+const path = require('path');
+const ora = require('ora');
+const rm = require('rimraf');
+const program = require('commander');
+const webpack = require('webpack');
 const webpackConfig = require('../lib/webpack.prod.config');
 const logger = require('../lib/logger');
 const config = require(cwd('./abc.json'));

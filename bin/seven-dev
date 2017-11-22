@@ -13,7 +13,9 @@ const program = require('commander');
 const express = require('express');
 const webpack = require('webpack');
 const webpackConfig = require('../lib/webpack.dev.config');
+const utils = require('../lib/utils');
 const logger = require('../lib/logger');
+const config = require(utils.cwd('./abc.json'));
 
 program
   .option('-p,--port [port]', 'Server port')
@@ -35,6 +37,21 @@ server.use(require('webpack-hot-middleware')(compiler, {
   heartbeat: 2000,
   log: false
 }));
+
+// proxy api requests
+if (config.proxyTable && Object.keys(config.proxyTable).length > 0) {
+  const proxyMiddleware = require('http-proxy-middleware');
+
+  Object.keys(config.proxyTable).forEach(function (context) {
+    const options = config.proxyTable[context];
+    if (typeof options === 'string') {
+      options = {
+        target: options
+      };
+    }
+    server.use(proxyMiddleware(options.filter || context, options));
+  });
+}
 
 server.listen(port, function(err) {
   if (err) logger.fatal(err);

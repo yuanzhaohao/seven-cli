@@ -23,7 +23,7 @@ program
   .option('-p,--path [port]', 'Dist path')
   .parse(process.argv);
 
-
+const startTime = +new Date;
 const assetsRoot = cwd(program.path || config.assetsRoot);
 const spinner = ora('building for production...');
 
@@ -36,6 +36,9 @@ rm(assetsRoot, err => {
   fs.copySync(cwd(config.staticPath), path.join(assetsRoot, config.staticPath));
   webpack(webpackConfig, function (err, stats) {
     spinner.stop();
+    const endTime = +new Date;
+    console.log();
+    console.log('building time: ' + (endTime - startTime));
     if (err) logger.fatal(err);
 
     process.stdout.write(stats.toString({
@@ -45,9 +48,8 @@ rm(assetsRoot, err => {
       chunks: false,
       chunkModules: false
     }) + '\n\n');
-
     if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n');
-  })
+  });
 });
 
 function cwd(file) {

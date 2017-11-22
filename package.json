@@ -28,7 +28,6 @@
   "homepage": "https://github.com/yuanzhaohao/seven-cli#readme",
   "dependencies": {
     "async": "^2.6.0",
-    "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "chalk": "^2.3.0",
     "commander": "^2.11.0",
@@ -43,6 +42,7 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "glob": "^7.1.2",
     "handlebars": "^4.0.11",
+    "happypack": "^4.0.0",
     "html-webpack-plugin": "^2.30.1",
     "inject-loader": "^3.0.1",
     "inquirer": "^3.3.0",

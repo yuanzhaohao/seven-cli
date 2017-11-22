@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-/**
- * check config
- */
+
+// check config
 const checkConfig = require('../lib/check-config');
 checkConfig();
 

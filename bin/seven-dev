@@ -42,7 +42,7 @@ if (config.proxyTable && Object.keys(config.proxyTable).length > 0) {
   const proxyMiddleware = require('http-proxy-middleware');
 
   Object.keys(config.proxyTable).forEach(function (context) {
-    const options = config.proxyTable[context];
+    let options = config.proxyTable[context];
     if (typeof options === 'string') {
       options = {
         target: options

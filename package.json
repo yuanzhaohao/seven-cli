@@ -1,6 +1,6 @@
 {
   "name": "seven-cli",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A front-end build tool 前端构建工具",
   "main": "index.js",
   "bin": {
@@ -30,6 +30,7 @@
     "async": "2.6.0",
     "babel-loader": "7.1.2",
     "chalk": "2.3.0",
+    "clean-css": "4.1.9",
     "commander": "2.11.0",
     "compression-webpack-plugin": "1.0.1",
     "connect-history-api-fallback": "1.4.0",
@@ -57,6 +58,7 @@
     "rimraf": "2.6.2",
     "semver": "5.4.1",
     "tildify": "1.2.0",
+    "uglify-js": "3.1.10",
     "url-loader": "0.6.2",
     "user-home": "2.0.0",
     "vue-loader": "13.5.0",

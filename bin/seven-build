@@ -14,6 +14,9 @@ const path = require('path');
 const ora = require('ora');
 const rm = require('rimraf');
 const program = require('commander');
+const glob = require('glob');
+const uglifyJs = require('uglify-js');
+const CleanCSS = require('clean-css');
 const webpack = require('webpack');
 const webpackConfig = require('../lib/webpack.prod.config');
 const logger = require('../lib/logger');
@@ -33,7 +36,6 @@ spinner.start();
 rm(assetsRoot, err => {
   if (err) logger.fatal(err);
 
-  fs.copySync(cwd(config.staticPath), path.join(assetsRoot, config.staticPath));
   webpack(webpackConfig, function (err, stats) {
     spinner.stop();
     const endTime = +new Date;
@@ -49,6 +51,22 @@ rm(assetsRoot, err => {
       chunkModules: false
     }) + '\n\n');
     if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n');
+  });
+
+  /**
+   * copy static & minify static
+   */
+  const staticDistPath = path.join(assetsRoot, config.staticPath)
+  fs.copySync(cwd(config.staticPath), staticDistPath);
+
+  glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
+    const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));
+    fs.writeFileSync(filepath, miniJS.code, 'utf8');
+  });
+
+  glob.sync(path.join(staticDistPath, './*.css')).forEach(filepath => {
+    const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'));
+    fs.writeFileSync(filepath, miniCSS.styles, 'utf8');
   });
 });
 

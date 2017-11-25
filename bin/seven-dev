@@ -8,6 +8,7 @@ checkConfig();
  * program start
  */
 const path = require('path');
+const fs = require('fs');
 const program = require('commander');
 const express = require('express');
 const webpack = require('webpack');
@@ -26,7 +27,20 @@ const host = program.host || 'localhost';
 const server = express();
 const compiler = webpack(webpackConfig);
 
-server.use('/static', express.static(path.join(process.cwd(), './static')));
+server.use('/static', express.static(utils.cwd('./static')));
+
+if (config.mockData && fs.existsSync(utils.cwd('mock'))) {
+  const mockRouter = express.Router()
+  mockRouter.all('/:method', (req, res) => {
+    let method = req.params.method.replace(/\.json$/, '');
+    let jsonPath = path.join(utils.cwd('mock'), method + '.json');
+    delete require.cache[require.resolve(jsonPath)];
+    let data = require(jsonPath);
+    res.json(data);
+  });
+  server.use('/mock-api', mockRouter);
+}
+
 server.use(require('connect-history-api-fallback')());
 
 server.use(require('webpack-dev-middleware')(compiler, {

@@ -28,7 +28,7 @@ program
 
 const startTime = +new Date;
 const assetsRoot = cwd(program.path || config.assetsRoot);
-const spinner = ora('building for production...');
+const spinner = ora('building...');
 
 webpackConfig.output.path = assetsRoot;
 spinner.start();

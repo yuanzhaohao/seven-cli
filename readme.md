@@ -27,5 +27,13 @@ Step 3. production
 $ seven build
 ```
 
+## Change Log
+
+#### 0.0.10
+* fix: 修复postcss options为null的时候，postcss-loader报错的bug
+
+#### 0.0.9
+* feat: 拆分模块，优化代码
+
 ## License
 MIT

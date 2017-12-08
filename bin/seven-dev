@@ -44,6 +44,7 @@ if (config.mockData && fs.existsSync(utils.cwd('mock'))) {
 server.use(require('connect-history-api-fallback')());
 
 server.use(require('webpack-dev-middleware')(compiler, {
+  headers: { "Access-Control-Allow-Origin": "*" },
   quiet: true
 }));
 server.use(require('webpack-hot-middleware')(compiler, {

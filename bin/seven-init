@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const download = require('download-git-repo');
 const exists = require('fs').existsSync;
 const path = require('path');
 const ora = require('ora');
-const rm = require('rimraf').sync;
-const tildify = require('tildify')
-const home = require('user-home');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const utils = require('../lib/utils');
 const logger = require('../lib/logger');
 const prompts = require('../lib/prompts');
 const generate = require('../lib/generate');
@@ -18,10 +15,7 @@ const localPath = require('../lib/local-path');
 
 program
   .usage('[project-name]')
-  .option('-c, --clone', 'use git clone')
-  .option('--offline', 'use cached template')
   .parse(process.argv);
-
 
 /**
  * help
@@ -52,10 +46,8 @@ const name = inPlace
   ? path.relative('../', process.cwd())
   : rawName;
 const to = path.resolve(rawName || '.');
-const clone = program.clone || false;
 const isExists = exists(to);
 let template;
-let tmp;
 let opts;
 
 if (isExists) {
@@ -70,13 +62,10 @@ if (isExists) {
 
 inquirer.prompt(prompts).then(function(answers) {
   opts = Object.assign(answers, { name });
-  template = answers.template;
-  tmp = path.join(home, '.seven-templates', template.replace(/\//g, '-'))
-  if (program.offline) {
-    console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
-    template = tmp;
-  }
+  console.log(answers.template);
+  template = utils.ownDir('./templates/' + answers.template);
 
+  console.log(template);
   if (isExists) {
     if (answers.ok) {
       run();
@@ -87,49 +76,18 @@ inquirer.prompt(prompts).then(function(answers) {
 });
 
 function run() {
-  if (localPath.isLocalPath(template)) {
-    const templatePath = localPath.getTemplatePath(template);
-    if (exists(templatePath)) {
-      generate(opts, templatePath, to, function(err) {
-        if (err) logger.fatal(err);
-        console.log();
-        logger.success('Generated "%s".', name);
-        complete();
-      });
-    } else {
-      logger.fatal('Local template "%s" not found.', template);
-    }
-  } else {
-    checkVersion(downloadAndGenerate);
-  }
-}
-
-function downloadAndGenerate() {
-  let spinner = ora('downloading template...');
-
-  template = `yuanzhaohao/template-${template}`;
-  spinner.start();
-  if (exists(tmp)) rm(tmp);
-
-  download(template, tmp, {
-    clone: clone
-  }, function(err) {
-    spinner.stop();
-    if (err) {
-      console.log(chalk.red('Failed to download repo ' + template + ': ' + err.message.trim()));
-    }
-    generate(opts, tmp, to, function(err) {
+  checkVersion(function() {
+    let spinner = ora('generate project...');
+    spinner.start();
+    generate(opts, template, to, function(err) {
+      const message = `To get started:\n\n  ${!inPlace ? `cd ${name}` : ''}\n  npm install\n  npm run dev\n\n`
+      spinner.stop();
       if (err) logger.fatal(err);
       console.log()
       logger.success('Generated "%s".', name);
-      complete();
+      console.log('\n' + message.split(/\r?\n/g).map(function (line) {
+        return '   ' + line
+      }).join('\n'));
     });
   });
-}
-
-function complete() {
-  const message = `To get started:\n\n  ${!inPlace ? `cd ${name}` : ''}\n  npm install\n  npm run dev\n\n`
-  console.log('\n' + message.split(/\r?\n/g).map(function (line) {
-    return '   ' + line
-  }).join('\n'));
 }

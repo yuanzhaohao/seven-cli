@@ -29,6 +29,11 @@ $ seven build
 
 ## Change Log
 
+#### 0.0.11
+* seven-dev时，使用open打开链接
+* 增加electron template
+* 把template内置在项目中
+
 #### 0.0.10
 * fix: 修复postcss options为null的时候，postcss-loader报错的bug
 

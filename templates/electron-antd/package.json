@@ -6,8 +6,8 @@
   "license": "{{ license }}",
   "private": true,
   "scripts": {
-    "start": "seven dev -p 7777",
-    "dev": "seven dev -p 7777",
+    "start": "electron .",
+    "dev": "seven dev -p 9999",
     "build": "seven build"
   },
   "dependencies": {

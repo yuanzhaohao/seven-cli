@@ -12,6 +12,7 @@ const fs = require('fs');
 const program = require('commander');
 const express = require('express');
 const webpack = require('webpack');
+const open = require('open');
 const webpackConfig = require('../lib/webpack.dev.config');
 const utils = require('../lib/utils');
 const logger = require('../lib/logger');
@@ -68,6 +69,9 @@ if (config.proxyTable && Object.keys(config.proxyTable).length > 0) {
 
 server.listen(port, function(err) {
   if (err) logger.fatal(err);
-  const uri = `http://${host}:${port}`;
+  const uri = `http://${host}:${port}/`;
   console.log(`Listening at ${uri}\n`);
+  if (config.electron !== true) {
+    open(uri);
+  }
 });

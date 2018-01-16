@@ -81,11 +81,33 @@ function run() {
       const message = `To get started:\n\n  ${!inPlace ? `cd ${name}` : ''}\n  npm install\n  npm run dev\n\n`
       spinner.stop();
       if (err) logger.fatal(err);
+
       console.log()
       logger.success('Generated "%s".', name);
-      console.log('\n' + message.split(/\r?\n/g).map(function (line) {
-        return '   ' + line
-      }).join('\n'));
+
+      if (inPlace) {
+        installDependencies();
+        // utils.exec('cd', [ name ], {
+        //   stdio: 'inherit',
+        //   errorMessage: `cd ${name} error`
+        // });
+      } else {
+        console.log('\n' + message.split(/\r?\n/g).map(function (line) {
+          return '   ' + line
+        }).join('\n'));
+      }
     });
   });
+}
+
+function installDependencies() {
+  console.log()
+  console.log('install dependencies...');
+  spinner = ora('install dependencies...');
+  spinner.start();
+  utils.exec('npm', [ 'install' ], {
+    stdio: 'inherit',
+    errorMessage: 'install dependencies error'
+  });
+  spinner.stop();
 }

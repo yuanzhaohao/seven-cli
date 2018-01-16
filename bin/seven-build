@@ -19,57 +19,57 @@ const uglifyJs = require('uglify-js');
 const CleanCSS = require('clean-css');
 const webpack = require('webpack');
 const webpackConfig = require('../lib/webpack.prod.config');
+const utils = require('../lib/utils');
 const logger = require('../lib/logger');
-const config = require(cwd('./abc.json'));
+const checkVersion = require('../lib/check-version');
+const config = require(utils.cwd('./abc.json'));
 
 program
   .option('-p,--path [port]', 'Dist path')
   .parse(process.argv);
 
-const startTime = +new Date;
-const assetsRoot = cwd(program.path || config.assetsRoot);
-const spinner = ora('building...');
+checkVersion(function() {
+  const startTime = +new Date;
+  const assetsRoot = utils.cwd(program.path || config.assetsRoot);
+  const spinner = ora('building...');
 
-webpackConfig.output.path = assetsRoot;
-spinner.start();
+  webpackConfig.output.path = assetsRoot;
+  spinner.start();
 
-rm(assetsRoot, err => {
-  if (err) logger.fatal(err);
-
-  webpack(webpackConfig, function (err, stats) {
-    spinner.stop();
-    const endTime = +new Date;
-    console.log();
-    console.log('building time: ' + (endTime - startTime));
+  rm(assetsRoot, err => {
     if (err) logger.fatal(err);
 
-    process.stdout.write(stats.toString({
-      colors: true,
-      modules: false,
-      children: false,
-      chunks: false,
-      chunkModules: false
-    }) + '\n\n');
-    if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n');
-  });
+    webpack(webpackConfig, function (err, stats) {
+      spinner.stop();
+      const endTime = +new Date;
+      console.log();
+      console.log('building time: ' + (endTime - startTime));
+      if (err) logger.fatal(err);
 
-  /**
-   * copy static & minify static
-   */
-  const staticDistPath = path.join(assetsRoot, config.staticPath)
-  fs.copySync(cwd(config.staticPath), staticDistPath);
+      process.stdout.write(stats.toString({
+        colors: true,
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false
+      }) + '\n\n');
+      if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n');
+    });
 
-  glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
-    const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));
-    fs.writeFileSync(filepath, miniJS.code, 'utf8');
-  });
+    /**
+     * copy static & minify static
+     */
+    const staticDistPath = path.join(assetsRoot, config.staticPath)
+    fs.copySync(utils.cwd(config.staticPath), staticDistPath);
 
-  glob.sync(path.join(staticDistPath, './*.css')).forEach(filepath => {
-    const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'));
-    fs.writeFileSync(filepath, miniCSS.styles, 'utf8');
+    glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
+      const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));
+      fs.writeFileSync(filepath, miniJS.code, 'utf8');
+    });
+
+    glob.sync(path.join(staticDistPath, './*.css')).forEach(filepath => {
+      const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'));
+      fs.writeFileSync(filepath, miniCSS.styles, 'utf8');
+    });
   });
 });
-
-function cwd(file) {
-  return path.resolve(file || '')
-}

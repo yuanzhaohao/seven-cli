@@ -29,6 +29,10 @@ $ seven build
 
 ## Change Log
 
+#### 0.0.12
+* seven-build时，检测版本更新
+* seven-init时，若在项目里则自动install依赖
+
 #### 0.0.11
 * seven-dev时，使用open打开链接
 * 增加electron template

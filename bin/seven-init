@@ -78,7 +78,6 @@ function run() {
     let spinner = ora('generate project...');
     spinner.start();
     generate(opts, template, to, function(err) {
-      const message = `To get started:\n\n  ${!inPlace ? `cd ${name}` : ''}\n  npm install\n  npm run dev\n\n`
       spinner.stop();
       if (err) logger.fatal(err);
 
@@ -86,12 +85,13 @@ function run() {
       logger.success('Generated "%s".', name);
 
       if (inPlace) {
-        installDependencies();
-        // utils.exec('cd', [ name ], {
+        // utils.exec('cd', [ utils.cwd(name) ], {
         //   stdio: 'inherit',
         //   errorMessage: `cd ${name} error`
         // });
+        installDependencies();
       } else {
+        const message = `To get started:\n\n  ${!inPlace ? `cd ${name}` : ''}\n  npm install\n  npm run dev\n\n`
         console.log('\n' + message.split(/\r?\n/g).map(function (line) {
           return '   ' + line
         }).join('\n'));

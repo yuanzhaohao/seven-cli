@@ -13,6 +13,7 @@ runtime environment
 - npm 3+
 
 ### How to use
+install seven-cli
 ```shell
 $ npm i seven-cli -g
 ```

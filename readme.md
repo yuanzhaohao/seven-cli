@@ -1,5 +1,11 @@
 > A front-end build tool 前端构建工具
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/seven-cli"><img src="https://img.shields.io/npm/dm/seven-cli.svg" alt="Downloads"></a>
+  <a href="https://www.npmjs.com/package/seven-cli"><img src="https://img.shields.io/npm/v/seven-cli.svg" alt="Version"></a>
+  <a href="https://www.npmjs.com/package/seven-cli"><img src="https://img.shields.io/npm/l/seven-cli.svg" alt="License"></a>
+</p>
+
 ## Installation
 
 runtime environment
@@ -11,7 +17,7 @@ runtime environment
 $ npm i seven-cli -g
 ```
 
-Step 1. create a vue-based project (vue scaffold will be downloaded automatically if not installed)
+Step 1. create a project
 ```shell
 $ seven init my-project
 $ cd my-project

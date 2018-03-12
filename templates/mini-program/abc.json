@@ -1,7 +1,8 @@
 {
-  "type": "electron",
+  "type": "mini-program",
   "staticPath": "./static",
   "assetsRoot": "./dist",
   "cssSourceMap": true,
+  "viewportWidth": 750,
   "proxyTable": {}
 }

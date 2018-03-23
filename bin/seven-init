@@ -64,6 +64,9 @@ inquirer.prompt(prompts).then(function(answers) {
   opts = Object.assign(answers, { name });
   template = utils.ownDir('./templates/' + answers.template);
 
+  if (!exists(template)) {
+    return;
+  }
   if (isExists) {
     if (answers.ok) {
       run();

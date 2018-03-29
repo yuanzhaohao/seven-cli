@@ -4,5 +4,6 @@
   "assetsRoot": "./dist",
   "cssSourceMap": true,
   "viewportWidth": 750,
+  "mockData": false,
   "proxyTable": {}
 }

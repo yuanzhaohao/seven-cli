@@ -1,5 +1,8 @@
 ## Change Log
 
+#### 0.0.13
+* update react-template
+
 #### 0.0.12
 * seven-build时，检测版本更新
 * seven-init时，若在项目里则自动install依赖

@@ -17,6 +17,7 @@ const program = require('commander');
 const glob = require('glob');
 const uglifyJs = require('uglify-js');
 const CleanCSS = require('clean-css');
+const exists = require('fs').existsSync;
 const webpack = require('webpack');
 const webpackConfig = require('../lib/webpack.prod.config');
 const utils = require('../lib/utils');
@@ -60,16 +61,19 @@ checkVersion(function() {
      * copy static & minify static
      */
     const staticDistPath = path.join(assetsRoot, config.staticPath)
-    fs.copySync(utils.cwd(config.staticPath), staticDistPath);
 
-    glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
-      const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));
-      fs.writeFileSync(filepath, miniJS.code, 'utf8');
-    });
+    if (exists(utils.cwd(config.staticPath))) {
+      fs.copySync(utils.cwd(config.staticPath), staticDistPath);
 
-    glob.sync(path.join(staticDistPath, './*.css')).forEach(filepath => {
-      const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'));
-      fs.writeFileSync(filepath, miniCSS.styles, 'utf8');
-    });
+      glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
+        const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));
+        fs.writeFileSync(filepath, miniJS.code, 'utf8');
+      });
+
+      glob.sync(path.join(staticDistPath, './*.css')).forEach(filepath => {
+        const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'));
+        fs.writeFileSync(filepath, miniCSS.styles, 'utf8');
+      });
+    }
   });
 });

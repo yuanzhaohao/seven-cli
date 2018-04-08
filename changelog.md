@@ -2,6 +2,7 @@
 
 #### 0.0.13
 * update react-template
+* 支持热更新，在abc.json下设置`hotReplace: true`即可
 
 #### 0.0.12
 * seven-build时，检测版本更新

@@ -44,7 +44,9 @@ if (config.mockData && fs.existsSync(utils.cwd('mock'))) {
 
 server.use(require('connect-history-api-fallback')());
 
+console.log(utils.cwd(config.assetsRoot));
 server.use(require('webpack-dev-middleware')(compiler, {
+  publicPath: '/',//utils.cwd(config.assetsRoot),
   quiet: true
 }));
 server.use(require('webpack-hot-middleware')(compiler, {

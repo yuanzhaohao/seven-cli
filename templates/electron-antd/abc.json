@@ -3,6 +3,7 @@
   "staticPath": "./static",
   "assetsRoot": "./dist",
   "cssSourceMap": true,
+  "hotReplace": true,
   "mockData": false,
   "proxyTable": {}
 }

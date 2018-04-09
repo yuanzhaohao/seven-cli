@@ -6,4 +6,5 @@ require('commander')
   .command('init', 'init a new project')
   .command('dev', 'develop your project')
   .command('build', 'build your project')
+  .command('lint', 'lint your project')
   .parse(process.argv);

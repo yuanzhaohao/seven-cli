@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+const lint = require('../lib/lint');
+
+program
+  .usage('[folder-name]')
+  .parse(process.argv);
+
+/**
+ * help
+ */
+program.on('--help', function () {
+  console.log();
+  console.log('  Examples:')
+  console.log()
+  console.log(chalk.gray('    # use eslint lint your project'))
+  console.log('    $ seven lint ${folder}')
+  console.log()
+});
+
+/**
+ * Padding
+ */
+console.log();
+process.on('exit', function() {
+  console.log();
+});
+
+/**
+ * Settings
+ */
+const folderName = program.args[0];
+
+console.log(folderName);
+lint(folderName);

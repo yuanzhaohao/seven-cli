@@ -32,5 +32,4 @@ process.on('exit', function() {
  */
 const folderName = program.args[0];
 
-console.log(folderName);
 lint(folderName);

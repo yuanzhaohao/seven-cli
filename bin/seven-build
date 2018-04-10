@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 
-/**
- * check config
- */
-const checkConfig = require('../lib/check-config');
-checkConfig();
+// check config
+require('../lib/check-config')();
 
 /**
  * start
@@ -19,7 +16,7 @@ const uglifyJs = require('uglify-js');
 const CleanCSS = require('clean-css');
 const exists = require('fs').existsSync;
 const webpack = require('webpack');
-const webpackConfig = require('../lib/webpack.prod.config');
+const webpackConfig = require('../lib/webpack/webpack.prod.config');
 const utils = require('../lib/utils');
 const logger = require('../lib/logger');
 const checkVersion = require('../lib/check-version');
@@ -44,7 +41,7 @@ checkVersion(function() {
       spinner.stop();
       const endTime = +new Date;
       console.log();
-      console.log('building time: ' + (endTime - startTime));
+      console.log('build time: ' + (endTime - startTime));
       if (err) logger.fatal(err);
 
       process.stdout.write(stats.toString({

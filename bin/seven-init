@@ -8,10 +8,9 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const utils = require('../lib/utils');
 const logger = require('../lib/logger');
-const prompts = require('../lib/prompts');
-const generate = require('../lib/generate');
+const prompts = require('../lib/init/prompts');
+const generate = require('../lib/init/generate');
 const checkVersion = require('../lib/check-version');
-const localPath = require('../lib/local-path');
 
 program
   .usage('[project-name]')

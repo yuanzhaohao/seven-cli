@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 // check config
-const checkConfig = require('../lib/check-config');
-checkConfig();
+require('../lib/check-config')();
 
 /**
  * program start
@@ -13,7 +12,7 @@ const program = require('commander');
 const express = require('express');
 const webpack = require('webpack');
 const open = require('open');
-const webpackConfig = require('../lib/webpack.dev.config');
+const webpackConfig = require('../lib/webpack/webpack.dev.config');
 const utils = require('../lib/utils');
 const logger = require('../lib/logger');
 const config = require(utils.cwd('./abc.json'));

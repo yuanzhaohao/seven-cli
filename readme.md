@@ -33,3 +33,8 @@ Step 3. production
 ```shell
 $ seven build
 ```
+
+Step 3. lint
+```shell
+$ seven lint
+```

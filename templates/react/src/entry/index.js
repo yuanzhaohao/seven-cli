@@ -1,20 +1,14 @@
-import 'antd/dist/antd.less';
-import '@/less/index.less';
+import '../themes/index.less';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import Page from '../components/Page';
+import { Provider } from 'mobx-react';
+import stores from '../stores';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-    };
-  }
-
-  render() {
-    return <h3>Helloworld!</h3>;
-  }
-};
-
-ReactDOM.render(<App />, document.getElementById('app'));
+render(
+  <Provider {...stores}>
+    <Page />
+  </Provider>,
+  document.getElementById('app')
+);

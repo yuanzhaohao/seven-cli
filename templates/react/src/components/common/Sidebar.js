@@ -31,7 +31,7 @@ class Sidebar extends React.Component {
           <div className="logo-image"></div>
           <div className={classnames(['logo-title', {
             'logo-hidden': collapsed
-          }])}>腾讯智能营销云</div>
+          }])}>{configData.projectName}</div>
         </Link>
         <Menu className="menu"
           theme="dark"

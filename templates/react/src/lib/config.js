@@ -1,3 +1,5 @@
 export default {
-  defaultUrl: 'data-overview'
+  defaultUrl: 'data-overview',
+  projectName: '{{ name }}',
+  author: '{{ author }}'
 };

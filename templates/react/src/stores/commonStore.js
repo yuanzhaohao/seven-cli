@@ -1,10 +1,12 @@
 import { observable, action, configure } from 'mobx';
-configure({ enforceActions: true });
+import configData from '@/lib/config';
 
-let hash = location.hash.replace('#/', '');
+configure({ enforceActions: true });
+const hash = location.hash.replace('#/', '');
+
 
 class CommonStore {
-  @observable hash = hash;
+  @observable hash = hash || configData.defaultUrl;
   @observable collapsed = false;
 
   @action setCollapse(collapsed) {

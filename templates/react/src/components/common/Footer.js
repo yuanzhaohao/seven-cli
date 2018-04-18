@@ -1,15 +1,14 @@
+import './footer.less';
 import React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout } from 'antd';
+import configData from '@/lib/config';
 const { Footer } = Layout;
 
-export default class Foot extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
+export default class Foot extends React.Component {
   render() {
     return (
-      <Footer style={{ textAlign: 'center' }}>Powered by QCloud</Footer>
+      <Footer className="copyright">Powered by {configData.author}</Footer>
     );
   }
 }

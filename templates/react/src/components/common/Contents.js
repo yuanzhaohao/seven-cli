@@ -10,7 +10,6 @@ import Crowd from '../crowd/Crowd';
 import DataInsight from '../data-insight/DataInsight';
 import Marketing from '../marketing/Marketing';
 import NotFound from './NotFound';
-import Creation from '../crowd/creation/index'
 
 export default class Contents extends React.Component {
   render() {
@@ -22,7 +21,6 @@ export default class Contents extends React.Component {
           <Route exact path="/crowd" component={Crowd} />
           <Route exact path="/data-insight" component={DataInsight} />
           <Route exact path="/marketing" component={Marketing} />
-          <Route path="/creation" component={Creation} />
           <Route exact path="*" component={NotFound} />
 
         </Switch>

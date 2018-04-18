@@ -29,7 +29,7 @@ class Head extends React.Component {
               <Menu.Item key="logout">退出登录</Menu.Item>
             </Menu>
           } placement="bottomCenter">
-            <span className="header-name">腾讯云测试01<Icon type="down" /></span>
+            <span className="header-name">admin<Icon type="down" /></span>
           </Dropdown>
         </div>
       </Header>

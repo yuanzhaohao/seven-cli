@@ -1,5 +1,8 @@
 ## Change Log
 
+#### 0.0.15
+* update vue template: 补充`.babelrc`和`.gitignore`
+
 #### 0.0.14
 * update react template: 使用react-router+antd+mobx开发管理后台
 * seven lint: 结合eslint检测代码

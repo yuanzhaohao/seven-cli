@@ -1,5 +1,9 @@
 ## Change Log
 
+#### 0.0.16
+* 增加externals配置
+* 使用webpack-visualizer-plugin增加打包日志
+
 #### 0.0.15
 * update vue template: 补充`.babelrc`和`.gitignore`
 

@@ -21,7 +21,7 @@ const webpackConfig = require('../lib/webpack/webpack.prod.config');
 const utils = require('../lib/utils');
 const logger = require('../lib/logger');
 const checkVersion = require('../lib/check-version');
-const config = require(utils.cwd('./abc.json'));
+const opts = require(utils.cwd('./abc.json'));
 
 program
   .option('-p,--path [port]', 'Dist path')
@@ -29,7 +29,7 @@ program
 
 checkVersion(function() {
   const startTime = +new Date;
-  const assetsRoot = utils.cwd(program.path || config.assetsRoot);
+  const assetsRoot = utils.cwd(program.path || opts.assetsRoot);
   const spinner = ora('building...');
 
   webpackConfig.output.path = assetsRoot;
@@ -58,10 +58,10 @@ checkVersion(function() {
     /**
      * copy static & minify static
      */
-    const staticDistPath = path.join(assetsRoot, config.staticPath)
+    const staticDistPath = path.join(assetsRoot, opts.staticPath)
 
-    if (exists(utils.cwd(config.staticPath))) {
-      fs.copySync(utils.cwd(config.staticPath), staticDistPath);
+    if (exists(utils.cwd(opts.staticPath))) {
+      fs.copySync(utils.cwd(opts.staticPath), staticDistPath);
 
       glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
         const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));

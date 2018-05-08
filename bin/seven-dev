@@ -7,72 +7,26 @@ require('../lib/check-config')()
 /**
  * program start
  */
-const path = require('path');
-const fs = require('fs');
-const program = require('commander');
-const express = require('express');
-const webpack = require('webpack');
-const open = require('open');
-const webpackConfig = require('../lib/webpack/webpack.dev.config');
-const utils = require('../lib/utils');
-const logger = require('../lib/logger');
-const config = require(utils.cwd('./abc.json'));
+const fs = require('fs')
+const program = require('commander')
+const Server = require('../lib/server')
+const utils = require('../lib/utils')
+const logger = require('../lib/logger')
+const optsFile = utils.cwd('./abc.json')
+const opts = require(optsFile)
 
 program
   .option('-p,--port [port]', 'Server port')
   .option('-H,--host [host]', 'Server host')
   .parse(process.argv);
 
-const port = program.port || 7777;
-const host = program.host || 'localhost';
-const server = express();
-const compiler = webpack(webpackConfig);
+let port = program.port || 7777;
+let host = program.host || 'localhost';
 
-server.use('/static', express.static(utils.cwd('./static')));
+let server = new Server(port, host)
+server.start()
 
-if (config.mockData && fs.existsSync(utils.cwd('mock'))) {
-  const mockRouter = express.Router()
-  mockRouter.all('/:method', (req, res) => {
-    let method = req.params.method.replace(/\.json$/, '');
-    let jsonPath = path.join(utils.cwd('mock'), method + '.json');
-    delete require.cache[require.resolve(jsonPath)];
-    let data = require(jsonPath);
-    res.json(data);
-  });
-  server.use('/mock-api', mockRouter);
-}
-
-server.use(require('connect-history-api-fallback')());
-
-console.log(utils.cwd(config.assetsRoot));
-server.use(require('webpack-dev-middleware')(compiler, {
-  quiet: true
-}));
-server.use(require('webpack-hot-middleware')(compiler, {
-  heartbeat: 2000,
-  log: false
-}));
-
-// proxy api requests
-if (config.proxyTable && Object.keys(config.proxyTable).length > 0) {
-  const proxyMiddleware = require('http-proxy-middleware');
-
-  Object.keys(config.proxyTable).forEach(function (context) {
-    let options = config.proxyTable[context];
-    if (typeof options === 'string') {
-      options = {
-        target: options
-      };
-    }
-    server.use(proxyMiddleware(options.filter || context, options));
-  });
-}
-
-server.listen(port, function(err) {
-  if (err) logger.fatal(err);
-  const uri = `http://${host}:${port}/`;
-  console.log(`Listening at ${uri}\n`);
-  if (config.electron !== true) {
-    open(uri);
-  }
-});
+fs.watchFile(optsFile, function(cur, prev) {
+  logger.log('abc.json has changed!')
+  server.resume()
+})

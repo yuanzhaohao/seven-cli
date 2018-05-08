@@ -1,5 +1,5 @@
 {
-  "type": "electron",
+  "type": "electron-antd",
   "staticPath": "./static",
   "assetsRoot": "./dist",
   "cssSourceMap": true,

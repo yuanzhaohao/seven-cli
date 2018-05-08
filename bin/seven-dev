@@ -1,7 +1,8 @@
 #!/usr/bin/env node
+process.env.NODE_ENV = 'development'
 
 // check config
-require('../lib/check-config')();
+require('../lib/check-config')()
 
 /**
  * program start

@@ -26,7 +26,7 @@ let host = program.host || 'localhost';
 let server = new Server(port, host)
 server.start()
 
-fs.watchFile(optsFile, function(cur, prev) {
-  logger.log('abc.json has changed!')
-  server.resume()
-})
+// fs.watchFile(optsFile, function(cur, prev) {
+//   logger.log('abc.json has changed!')
+//   server.resume()
+// })

@@ -1,15 +1,20 @@
 ## Change Log
 
+#### 0.1.0
+* 抽离server
+* 增加`configs.js`，将配置集中
+* 优化代码
+
 #### 0.0.16
-* 增加externals配置
-* 使用webpack-visualizer-plugin增加打包日志
+* 增加`externals`配置
+* 使用`webpack-visualizer-plugin`增加打包日志
 
 #### 0.0.15
 * update vue template: 补充`.babelrc`和`.gitignore`
 
 #### 0.0.14
-* update react template: 使用react-router+antd+mobx开发管理后台
-* seven lint: 结合eslint检测代码
+* update react template: 使用`react-router+antd+mobx`开发管理后台
+* seven lint: 结合`eslint`检测代码
 
 #### 0.0.13
 * update react-template

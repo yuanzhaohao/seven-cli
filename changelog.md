@@ -1,5 +1,8 @@
 ## Change Log
 
+#### 0.1.1
+* extractStyle: 用以解决`[Style in async components can't extract to single CSS file.](https://github.com/vuejs/vue-loader/issues/273)`
+
 #### 0.1.0
 * 抽离server
 * 增加`configs.js`，将配置集中

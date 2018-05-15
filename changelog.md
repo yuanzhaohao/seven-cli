@@ -1,5 +1,8 @@
 ## Change Log
 
+#### 0.1.3
+* postcss autoprefixer: 将postcss的配置移出来到项目中
+
 #### 0.1.1
 * bugfix: Style in async components can't extract to single CSS file
 

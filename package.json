@@ -11,7 +11,7 @@
     "seven-lint": "bin/seven-lint"
   },
   "scripts": {
-    "test": "mocha test/build.test.js"
+    "test": "mocha test/test.js"
   },
   "engines": {
     "node": ">=4.0.0"

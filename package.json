@@ -10,6 +10,9 @@
     "seven-build": "bin/seven-build",
     "seven-lint": "bin/seven-lint"
   },
+  "scripts": {
+    "test": "mocha test/build.test.js"
+  },
   "engines": {
     "node": ">=4.0.0"
   },

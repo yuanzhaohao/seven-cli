@@ -24,10 +24,10 @@ let port = program.port || 7777;
 let host = program.host || 'localhost';
 
 let server = new Server(port, host)
-server.start(true)
+server.start(() => {
+  fs.watchFile(optsFile, function(cur, prev) {
+    logger.log('abc.json has changed!')
 
-fs.watchFile(optsFile, function(cur, prev) {
-  logger.log('abc.json has changed!')
-
-  server.resume()
-})
+    server.resume()
+  })
+}, true)

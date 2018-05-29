@@ -1,5 +1,9 @@
 ## Change Log
 
+#### 0.1.4
+* fix: vue-loader 13 need lower prettier
+* feat: resume project when change abc.json file
+
 #### 0.1.3
 * postcss autoprefixer: 将postcss的配置移出来到项目中
 

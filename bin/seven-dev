@@ -1,18 +1,15 @@
 #!/usr/bin/env node
 process.env.NODE_ENV = 'development'
 
-// check config
-require('../lib/check-config')()
-
 /**
  * program start
  */
 const fs = require('fs')
 const program = require('commander')
+const configs = require('../lib/configs')
 const Server = require('../lib/server')
-const utils = require('../lib/utils')
 const logger = require('../lib/logger')
-const optsFile = utils.cwd('./abc.json')
+const optsFile = configs.abcFile
 
 program
   .option('-p,--port [port]', 'Server port')

@@ -1,5 +1,5 @@
 {
-  "type": "vue",
+  "type": "react",
   "staticPath": "./static",
   "assetsRoot": "./dist",
   "cssSourceMap": true,

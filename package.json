@@ -60,6 +60,9 @@
     "less": "2.7.3",
     "less-loader": "^4.1.0",
     "metalsmith": "2.3.0",
+    "mpvue-loader": "^1.0.14",
+    "mpvue-template-compiler": "^1.0.12",
+    "mpvue-webpack-target": "^1.0.0",
     "open": "0.0.5",
     "optimize-css-assets-webpack-plugin": "3.2.0",
     "ora": "1.3.0",
@@ -80,6 +83,7 @@
     "webpack-dev-middleware": "1.12.2",
     "webpack-hot-middleware": "2.22.2",
     "webpack-merge": "4.1.1",
+    "webpack-mpvue-asset-plugin": "0.0.2",
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "devDependencies": {

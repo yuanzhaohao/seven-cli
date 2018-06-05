@@ -4,43 +4,46 @@ process.env.NODE_ENV = 'production'
 /**
  * start
  */
-const fs = require('fs-extra');
-const path = require('path');
-const ora = require('ora');
-const rm = require('rimraf');
-const program = require('commander');
-const glob = require('glob');
-const uglifyJs = require('uglify-js');
-const CleanCSS = require('clean-css');
-const exists = require('fs').existsSync;
-const webpack = require('webpack');
-const webpackConfig = require('../lib/webpack/webpack.prod.config');
-const utils = require('../lib/utils');
-const logger = require('../lib/logger');
-const checkVersion = require('../lib/check-version');
-const opts = require(utils.cwd('./abc.json'));
+const fs = require('fs-extra')
+const path = require('path')
+const ora = require('ora')
+const rm = require('rimraf')
+const program = require('commander')
+const glob = require('glob')
+const uglifyJs = require('uglify-js')
+const CleanCSS = require('clean-css')
+const exists = require('fs').existsSync
+const webpack = require('webpack')
+const configs = require('../lib/configs')
+const utils = require('../lib/utils')
+const logger = require('../lib/logger')
+const checkVersion = require('../lib/check-version')
+const webpackConfig = require('../lib/webpack/webpack.prod.config')
+const opts = configs.abcOpts
 
+
+console.log(webpackConfig)
 program
   .option('-p,--path [port]', 'Dist path')
-  .parse(process.argv);
+  .parse(process.argv)
 
 checkVersion(function() {
-  const startTime = +new Date;
-  const assetsRoot = utils.cwd(program.path || opts.assetsRoot);
-  const spinner = ora('building...');
+  const startTime = +new Date
+  const assetsRoot = utils.cwd(program.path || opts.assetsRoot)
+  const spinner = ora('building...')
 
-  webpackConfig.output.path = assetsRoot;
-  spinner.start();
+  webpackConfig.output.path = assetsRoot
+  spinner.start()
 
   rm(assetsRoot, err => {
-    if (err) logger.fatal(err);
+    if (err) logger.fatal(err)
 
     webpack(webpackConfig, function (err, stats) {
-      spinner.stop();
-      const endTime = +new Date;
-      console.log();
-      console.log('build time: ' + (endTime - startTime));
-      if (err) logger.fatal(err);
+      spinner.stop()
+      const endTime = +new Date
+      console.log()
+      console.log('build time: ' + (endTime - startTime))
+      if (err) logger.fatal(err)
 
       process.stdout.write(stats.toString({
         colors: true,
@@ -48,9 +51,9 @@ checkVersion(function() {
         children: false,
         chunks: false,
         chunkModules: false
-      }) + '\n\n');
-      if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n');
-    });
+      }) + '\n\n')
+      if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n')
+    })
 
     /**
      * copy static & minify static
@@ -58,17 +61,17 @@ checkVersion(function() {
     const staticDistPath = path.join(assetsRoot, opts.staticPath)
 
     if (exists(utils.cwd(opts.staticPath))) {
-      fs.copySync(utils.cwd(opts.staticPath), staticDistPath);
+      fs.copySync(utils.cwd(opts.staticPath), staticDistPath)
 
       glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
-        const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'));
-        fs.writeFileSync(filepath, miniJS.code, 'utf8');
-      });
+        const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'))
+        fs.writeFileSync(filepath, miniJS.code, 'utf8')
+      })
 
       glob.sync(path.join(staticDistPath, './*.css')).forEach(filepath => {
-        const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'));
-        fs.writeFileSync(filepath, miniCSS.styles, 'utf8');
-      });
+        const miniCSS = new CleanCSS({}).minify(fs.readFileSync(filepath, 'utf8'))
+        fs.writeFileSync(filepath, miniCSS.styles, 'utf8')
+      })
     }
-  });
-});
+  })
+})

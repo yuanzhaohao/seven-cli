@@ -18,6 +18,15 @@ import menuData from '@/lib/menu';
 @observer
 
 export default class Main extends React.Component {
+  componentWillUpdate(nextProps) {
+    // 监听路由变化
+    if (this.props.location !== nextProps.location) {
+      let pathname = nextProps.location.pathname.replace(/^\//, '');
+      let hash = pathname.split('/')[0];
+      this.props.commonStore.setHash(hash);
+    }
+  }
+  
   render() {
     let { collapsed } = this.props.commonStore;
 

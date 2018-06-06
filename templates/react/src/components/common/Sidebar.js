@@ -36,7 +36,6 @@ class Sidebar extends React.Component {
         <Menu className="menu"
           theme="dark"
           mode="inline"
-          onClick={this.onMenuClick}
           defaultOpenKeys={this.defaultOpenKeys}
           selectedKeys={[hash]}
         >
@@ -74,14 +73,6 @@ class Sidebar extends React.Component {
         </Menu>
       </Sider>
     );
-  }
-
-  onMenuClick = (e, special) => {
-    const { commonStore } = this.props;
-
-    if (e.key) {
-      commonStore.setHash(e.key);
-    }
   }
 }
 

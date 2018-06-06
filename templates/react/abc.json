@@ -6,5 +6,23 @@
   "hotReplace": true,
   "viewportWidth": 750,
   "mockData": false,
+  "optimizeCommon": {
+    "vendor-react": [
+      "react",
+      "react-dom",
+      "react-router"
+    ],
+    "vendor-mobx": [
+      "mobx",
+      "mobx-react"
+    ],
+    "vendor-antd": [
+      "antd"
+    ],
+    "vendor-lib": [
+      "axios",
+      "classnames"
+    ]
+  },
   "proxyTable": {}
 }

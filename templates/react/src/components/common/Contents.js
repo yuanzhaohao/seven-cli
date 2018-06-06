@@ -4,12 +4,21 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
 const { Content } = Layout;
-import DataOverview from '../data-overview/DataOverview';
-import DataButt from '../data-butt/DataButt';
-import Crowd from '../crowd/Crowd';
-import DataInsight from '../data-insight/DataInsight';
-import Marketing from '../marketing/Marketing';
+
 import NotFound from './NotFound';
+import asyncComponent from '@/components/asyncComponent'
+
+// import DataOverview from '../data-overview/DataOverview';
+// import DataButt from '../data-butt/DataButt';
+// import Crowd from '../crowd/Crowd';
+// import DataInsight from '../data-insight/DataInsight';
+// import Marketing from '../marketing/Marketing';
+
+const DataOverview = asyncComponent(() => import('../data-overview/DataOverview'));
+const DataButt = asyncComponent(() => import('../data-butt/DataButt'));
+const Crowd = asyncComponent(() => import('../crowd/Crowd'));
+const DataInsight = asyncComponent(() => import('../data-insight/DataInsight'));
+const Marketing = asyncComponent(() => import('../marketing/Marketing'));
 
 export default class Contents extends React.Component {
   render() {

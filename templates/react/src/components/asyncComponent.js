@@ -20,14 +20,15 @@ export default function asyncComponent(importComponent) {
     }
 
     render() {
+      let emptyStyle = {
+        width: '100%',
+        paddingTop: '24px',
+        paddingBottom: '24px',
+        textAlign: 'center'
+      };
       return this.state.component
         ? <this.state.component {...this.props} />
-        : <div style={{
-            width: '100%',
-            paddingTop: '24px',
-            paddingBottom: '24px',
-            textAlign: 'center'
-          }}>
+        : <div style={emptyStyle}>
           <Spin />
         </div>;
     }

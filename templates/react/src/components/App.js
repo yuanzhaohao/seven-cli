@@ -11,7 +11,6 @@ import Bread from './common/Bread';
 import Header from './common/Header';
 import Footer from './common/Footer';
 
-import emitter from '@/lib/emitter';
 import menuData from '@/lib/menu';
 
 @inject('commonStore')
@@ -26,7 +25,7 @@ export default class Main extends React.Component {
       this.props.commonStore.setHash(hash);
     }
   }
-  
+
   render() {
     let { collapsed } = this.props.commonStore;
 

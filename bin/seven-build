@@ -58,10 +58,10 @@ checkVersion(function() {
     /**
      * copy static & minify static
      */
-    const staticDistPath = path.join(assetsRoot, opts.staticPath)
-
-    if (exists(utils.cwd(opts.staticPath))) {
-      fs.copySync(utils.cwd(opts.staticPath), staticDistPath)
+    const staticPath = utils.cwd(opts.staticPath)
+    if (opts.staticPath && exists(staticPath)) {
+      const staticDistPath = path.join(assetsRoot, opts.staticPath)
+      fs.copySync(staticPath, staticDistPath)
 
       glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
         const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'))

@@ -21,8 +21,6 @@ const checkVersion = require('../lib/check-version')
 const webpackConfig = require('../lib/webpack/webpack.prod.config')
 const opts = configs.abcOpts
 
-
-console.log(webpackConfig)
 program
   .option('-p,--path [port]', 'Dist path')
   .parse(process.argv)
@@ -42,7 +40,6 @@ checkVersion(function() {
       spinner.stop()
       const endTime = +new Date
       console.log()
-      console.log('build time: ' + (endTime - startTime))
       if (err) logger.fatal(err)
 
       process.stdout.write(stats.toString({
@@ -52,7 +49,10 @@ checkVersion(function() {
         chunks: false,
         chunkModules: false
       }) + '\n\n')
-      if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n')
+      if (stats.hasErrors()) {
+        logger.fatal('  Build failed with errors.\n')
+        process.exit(1)
+      }
     })
 
     /**
@@ -73,5 +73,7 @@ checkVersion(function() {
         fs.writeFileSync(filepath, miniCSS.styles, 'utf8')
       })
     }
+
+    logger.log(`  Build complete. Total time: ${endTime - startTime}ms!\n`)
   })
 })

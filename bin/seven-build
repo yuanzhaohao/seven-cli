@@ -51,8 +51,8 @@ checkVersion(function() {
       }) + '\n\n')
       if (stats.hasErrors()) {
         logger.fatal('  Build failed with errors.\n')
-        process.exit(1)
       }
+      logger.log(`Build complete. Total time: ${endTime - startTime}ms!\n`)
     })
 
     /**
@@ -73,7 +73,5 @@ checkVersion(function() {
         fs.writeFileSync(filepath, miniCSS.styles, 'utf8')
       })
     }
-
-    logger.log(`  Build complete. Total time: ${endTime - startTime}ms!\n`)
   })
 })

@@ -1,30 +1,63 @@
 #!/usr/bin/env node
 process.env.NODE_ENV = 'development'
 
-/**
- * program start
- */
-const fs = require('fs')
 const program = require('commander')
-const configs = require('../lib/configs')
-const Server = require('../lib/server')
+const portfinder = require('portfinder')
+const express = require('express')
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const devWebpackConfig = require('../lib/webpack/webpack.dev.config')
 const logger = require('../lib/logger')
-const optsFile = configs.abcFile
+const configs = require('../lib/configs')
+const utils = require('../lib/utils')
+const opts = configs.abcOpts
 
 program
   .option('-p,--port [port]', 'Server port')
   .option('-H,--host [host]', 'Server host')
-  .parse(process.argv);
+  .parse(process.argv)
 
-let port = program.port || 7777;
-let host = program.host || 'localhost';
+let PORT = program.port || 7777;
+let HOST = program.host || 'localhost'
 
-let server = new Server(port, host)
-server.start()
-// server.start(function() {
-//   fs.watchFile(optsFile, function(cur, prev) {
-//     logger.log('abc.json has changed!')
-//
-//     server.resume()
-//   })
-// })
+portfinder.basePort = PORT
+portfinder.getPort((err, port) => {
+  if (err) logger.fatal(err)
+
+  const compiler = webpack(devWebpackConfig)
+
+  const server = new WebpackDevServer(compiler, {
+    clientLogLevel: 'warning',
+    hot: true,
+    compress: true,
+    host: HOST,
+    open: true,//opts.autoOpen,
+    overlay: { warnings: false, errors: true },
+    proxy: opts.proxyTable,
+    quiet: true,
+    watchOptions: {
+      aggregateTimeout: 350,
+      poll: 1500
+    },
+    before(app) {
+      logger.log('starting dev server...')
+      app.use('/static', express.static(utils.cwd('./static')))
+
+      // mock data
+      const mockPath = utils.cwd('./mock')
+      if (opts.mockData && fs.existsSync(mockPath)) {
+        const mockRouter = express.Router()
+        mockRouter.all('/:method', (req, res) => {
+          let method = req.params.method.replace(/\.json$/, '')
+          let jsonPath = path.join(mockPath, method + '.json')
+          delete require.cache[require.resolve(jsonPath)]
+          let data = require(jsonPath)
+          res.json(data)
+        });
+        app.use('/mock-api', mockRouter)
+      }
+    }
+  })
+
+  server.listen(PORT)
+})

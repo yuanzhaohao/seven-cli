@@ -24,16 +24,18 @@ portfinder.basePort = PORT
 portfinder.getPort((err, port) => {
   if (err) logger.fatal(err)
 
-  const compiler = webpack(devWebpackConfig)
-
-  const server = new WebpackDevServer(compiler, {
+  let page = opts.mainPage ? opts.mainPage : Object.keys(configs.entries)[0]
+  let uri = `http://${HOST}:${port}/${page}.html`
+  let compiler = webpack(devWebpackConfig)
+  let server = new WebpackDevServer(compiler, {
     clientLogLevel: 'warning',
-    hot: opts.hotReplace,
-    compress: true,
     host: HOST,
-    open: true,//opts.autoOpen,
-    overlay: { warnings: false, errors: true },
+    port,
+    compress: true,
+    hot: opts.hotReplace,
     proxy: opts.proxyTable,
+    open: opts.autoOpen ? uri : false,
+    overlay: { warnings: false, errors: true },
     quiet: true,
     watchOptions: {
       aggregateTimeout: 350,

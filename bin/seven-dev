@@ -28,7 +28,7 @@ portfinder.getPort((err, port) => {
 
   const server = new WebpackDevServer(compiler, {
     clientLogLevel: 'warning',
-    hot: true,
+    hot: opts.hotReplace,
     compress: true,
     host: HOST,
     open: true,//opts.autoOpen,

@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'development'
 
 const program = require('commander')
 const portfinder = require('portfinder')
+const open = require('open')
 const express = require('express')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
@@ -24,23 +25,16 @@ portfinder.basePort = PORT
 portfinder.getPort((err, port) => {
   if (err) logger.fatal(err)
 
-  let page = opts.mainPage ? opts.mainPage : Object.keys(configs.entries)[0]
-  let uri = `http://${HOST}:${port}/${page}.html`
+  let uri = `http://${HOST}:${port}/`
+
+  if (opts.hotReplace) {
+    Object.keys(configs.entries).forEach((name) => {
+      devWebpackConfig.entry[name] = [`webpack-dev-server/client?${uri}`].concat(devWebpackConfig.entry[name])
+    })
+  }
   let compiler = webpack(devWebpackConfig)
   let server = new WebpackDevServer(compiler, {
-    clientLogLevel: 'warning',
     host: HOST,
-    port,
-    compress: true,
-    hot: opts.hotReplace,
-    proxy: opts.proxyTable,
-    open: opts.autoOpen ? uri : false,
-    overlay: { warnings: false, errors: true },
-    quiet: true,
-    watchOptions: {
-      aggregateTimeout: 350,
-      poll: 1500
-    },
     before(app) {
       logger.log('starting dev server...')
       app.use('/static', express.static(utils.cwd('./static')))
@@ -58,8 +52,15 @@ portfinder.getPort((err, port) => {
         });
         app.use('/mock-api', mockRouter)
       }
+    },
+    after() {
+      if (opts.autoOpen === true && process.env.NODE_ENV !== 'testing') {
+        let page = opts.mainPage ? opts.mainPage : Object.keys(configs.entries)[0]
+        open(`${uri}${page}.html`)
+      }
+
     }
   })
 
-  server.listen(PORT)
+  server.listen(port)
 })

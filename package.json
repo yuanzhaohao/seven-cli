@@ -46,6 +46,7 @@
     "eslint-plugin-html": "^4.0.2",
     "eslint-plugin-react": "^7.7.0",
     "eventsource-polyfill": "^0.9.6",
+    "express": "^4.16.3",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "friendly-errors-webpack-plugin": "1.6.1",
@@ -79,7 +80,8 @@
     "vue-style-loader": "4.0.1",
     "vue-template-compiler": "2.5.16",
     "webpack": "3.12.0",
-    "webpack-dev-server": "^2.9.1",
+    "webpack-dev-middleware": "^2.0.6",
+    "webpack-hot-middleware": "^2.22.2",
     "webpack-merge": "4.1.1",
     "webpack-mpvue-asset-plugin": "0.0.2",
     "webpack-visualizer-plugin": "^0.1.11"

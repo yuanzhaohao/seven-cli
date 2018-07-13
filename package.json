@@ -1,6 +1,6 @@
 {
   "name": "seven-cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A front-end build tool 前端构建工具",
   "main": "index.js",
   "bin": {

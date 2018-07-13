@@ -1,5 +1,8 @@
 ## Change Log
 
+#### 0.1.6
+* bugfix
+
 #### 0.1.5
 * update webpack-dev-middleware
 * 优化hot-client逻辑

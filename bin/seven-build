@@ -24,6 +24,7 @@ const opts = configs.abcOpts
 
 console.log(webpackConfig)
 program
+  .alias('b')
   .option('-p,--path [port]', 'Dist path')
   .parse(process.argv)
 

@@ -12,6 +12,7 @@ const logger = require('../lib/logger')
 const optsFile = configs.abcFile
 
 program
+  .alias('d')
   .option('-p,--port [port]', 'Server port')
   .option('-H,--host [host]', 'Server host')
   .parse(process.argv);

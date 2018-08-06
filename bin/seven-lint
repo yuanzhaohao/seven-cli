@@ -4,6 +4,7 @@ const program = require('commander');
 const lint = require('../lib/lint/lint');
 
 program
+  .alias('l')
   .usage('[folder-name]')
   .parse(process.argv);
 

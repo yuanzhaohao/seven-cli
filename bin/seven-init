@@ -13,6 +13,7 @@ const generate = require('../lib/init/generate');
 const checkVersion = require('../lib/check-version');
 
 program
+  .alias('i')
   .usage('[project-name]')
   .parse(process.argv);
 

@@ -21,8 +21,6 @@ const checkVersion = require('../lib/check-version')
 const webpackConfig = require('../lib/webpack/webpack.prod.config')
 const opts = configs.abcOpts
 
-
-console.log(webpackConfig)
 program
   .alias('b')
   .option('-p,--path [port]', 'Dist path')
@@ -43,7 +41,6 @@ checkVersion(function() {
       spinner.stop()
       const endTime = +new Date
       console.log()
-      console.log('build time: ' + (endTime - startTime))
       if (err) logger.fatal(err)
 
       process.stdout.write(stats.toString({
@@ -53,16 +50,19 @@ checkVersion(function() {
         chunks: false,
         chunkModules: false
       }) + '\n\n')
-      if (stats.hasErrors()) logger.fatal('  Build failed with errors.\n')
+      if (stats.hasErrors()) {
+        logger.fatal('  Build failed with errors.\n')
+      }
+      logger.log(`Build complete. Total time: ${endTime - startTime}ms!\n`)
     })
 
     /**
      * copy static & minify static
      */
-    const staticDistPath = path.join(assetsRoot, opts.staticPath)
-
-    if (exists(utils.cwd(opts.staticPath))) {
-      fs.copySync(utils.cwd(opts.staticPath), staticDistPath)
+    const staticPath = utils.cwd(opts.staticPath)
+    if (opts.staticPath && exists(staticPath)) {
+      const staticDistPath = path.join(assetsRoot, opts.staticPath)
+      fs.copySync(staticPath, staticDistPath)
 
       glob.sync(path.join(staticDistPath, './*.js')).forEach(filepath => {
         const miniJS = uglifyJs.minify(fs.readFileSync(filepath, 'utf8'))

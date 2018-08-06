@@ -1,5 +1,12 @@
 ## Change Log
 
+#### 0.1.6
+* bugfix
+
+#### 0.1.5
+* update webpack-dev-middleware
+* 优化hot-client逻辑
+
 #### 0.1.4
 * fix: vue-loader 13 need lower prettier
 * feat: resume project when change abc.json file
